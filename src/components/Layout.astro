@@ -1,0 +1,26 @@
+---
+interface Prop {
+  title?: string
+}
+
+const { title } = Astro.props
+---
+
+<html>
+  <head>
+    <meta charset='UTF-8' />
+    <meta name='viewport' content='width=device-width, initial-scale=1.0' />
+    <title>{title}</title>
+  </head>
+  <body class='flex flex-col justify-between'>
+    <header
+      class='flex justify-around items-center mx-auto h-[50px] bg-indigo-300 sticky w-full'
+    >
+      <h2 class='font-bold text-3xl'>MovieTransition</h2>
+      <nav>
+        <a href='/' class='font-bold hover:text-stone-700'>Home</a>
+      </nav>
+    </header>
+    <slot />
+  </body>
+</html>

@@ -1,0 +1,61 @@
+---
+import Layout from '../components/Layout.astro'
+import MovieCard from '../components/MovieCard.astro'
+const get_movies = async () => {
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: `${import.meta.env.TOKEN}`
+    }
+  }
+
+  const req = await fetch(
+    'https://api.themoviedb.org/3/movie/popular?page=1',
+    options
+  )
+  const res = await req.json()
+
+  return res
+}
+
+const movies = await get_movies()
+---
+
+<Layout title='Inicio'>
+  <main class='container mx-auto py-10'>
+    <h1 class='text-center text-6xl font-black'>Movies</h1>
+    <section
+      id='movie-list'
+      class='grid sm:container sm:grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 justify-center items-center py-10 mx-auto'
+    >
+      {movies.results.map((mov) => <MovieCard mov={mov} />)}
+    </section>
+  </main>
+</Layout>
+
+<script>
+  window.navigation.addEventListener('navigate', async (e) => {
+    const url = new URL(e.destination.url)
+    if (location.origin !== url.origin) return
+
+    // interceptamos el evento
+    e.intercept({
+      // atrapamos el contenido de la pagina que hay que ir
+      async handler() {
+        const req = await fetch(url)
+        const res = await req.text()
+        const reg = /<body[^>]*>([\s\S]*)<\/body>/i
+        // separamos solo el contenido de adentro del body no el body completo
+        const html = res.match(reg)[1]
+
+        // usamos la api
+
+        document.startViewTransition(() => {
+          // insertando la nueva vista
+          document.body.innerHTML = html
+        })
+      }
+    })
+  })
+</script>

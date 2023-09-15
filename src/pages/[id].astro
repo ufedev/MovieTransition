@@ -1,0 +1,26 @@
+---
+import Layout from '../components/Layout.astro'
+const { id } = Astro.params
+const options = {
+  method: 'GET',
+  headers: {
+    accept: 'application/json',
+    Authorization: `${import.meta.env.TOKEN}`
+  }
+}
+const req = await fetch(`https://api.themoviedb.org/3/movie/${id}`, options)
+const mov = await req.json()
+---
+
+<Layout>
+  <div class='container mx-auto flex gap-2 justify-between mt-20'>
+    <img
+      src={`https://image.tmdb.org/t/p/w500${mov.poster_path}`}
+      alt={`${mov.title}`}
+      style={`view-transition-name:image-${mov.id}`}
+    />
+    <div>
+      <p>Lanzamiento: {new Date(mov.release_date).toLocaleDateString()}</p>
+    </div>
+  </div>
+</Layout>

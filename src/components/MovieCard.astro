@@ -1,0 +1,11 @@
+---
+const { mov } = Astro.props
+---
+
+<a href={`/${mov.id}`}>
+  <img
+    src={`https://image.tmdb.org/t/p/w500${mov.poster_path}`}
+    alt={`${mov.title}`}
+    style={`view-transition-name: image-${mov.id}`}
+  />
+</a>
